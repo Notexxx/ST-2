@@ -1,7 +1,13 @@
+cmake_minimum_required(VERSION 3.10)
+project(ST-2)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(header_path "${${PROJECT_NAME}_SOURCE_DIR}/include")
 set(header ${header_path}/circle.h
            ${header_path}/tasks.h)
-set(src circle.cpp tasks.cpp)   # ← ЭТО ГЛАВНОЕ!
+set(src circle.cpp tasks.cpp)
 
 add_library(${PROJECT_NAME} SHARED
   ${header}
@@ -20,6 +26,8 @@ target_include_directories(${PROJECT_NAME}.info
 target_link_libraries(${PROJECT_NAME}.info
   ${PROJECT_NAME})
 
+enable_testing()
+add_subdirectory(test)
 
 install(TARGETS ${PROJECT_NAME}
         LIBRARY DESTINATION "${lib_dest}"
