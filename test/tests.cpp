@@ -142,8 +142,6 @@ TEST(CircleTest, SetAreaToZero) {
 TEST(CircleTest, SetAreaToNegative) {
     Circle c(5.0);
     c.setArea(-M_PI * 9.0);
-    // При отрицательной площади sqrt выдаст nan, но по логике radius может быть отрицательным
-    // или просто проверяем, что метод не падает
     EXPECT_TRUE(std::isnan(c.getRadius()) || c.getRadius() < 0);
 }
 
@@ -190,7 +188,6 @@ TEST(TasksTest, PoolCostCalculation) {
 
 TEST(TasksTest, PoolCostReasonable) {
     double cost = poolCost();
-    // Ожидаем разумную сумму между 70 000 и 75 000 рублей
     EXPECT_GT(cost, 70000.0);
     EXPECT_LT(cost, 75000.0);
 }
@@ -208,10 +205,8 @@ TEST(CircleTest, SetRadiusThenSetFerenceThenSetArea) {
     Circle c(1.0);
     c.setRadius(2.0);
     EXPECT_DOUBLE_EQ(c.getRadius(), 2.0);
-    
     c.setFerence(2 * M_PI * 3.0);
     EXPECT_DOUBLE_EQ(c.getRadius(), 3.0);
-    
     c.setArea(M_PI * 16.0);
     EXPECT_DOUBLE_EQ(c.getRadius(), 4.0);
 }
@@ -222,18 +217,12 @@ TEST(CircleTest, GettersAfterMultipleSets) {
     double r1 = c.getRadius();
     double f1 = c.getFerence();
     double a1 = c.getArea();
-    
+
     c.setFerence(2 * M_PI * 3.0);
     double r2 = c.getRadius();
     double f2 = c.getFerence();
     double a2 = c.getArea();
-    
-    // После setRadius радиус должен быть 2
+
     EXPECT_DOUBLE_EQ(r1, 2.0);
-    // После setFerence радиус должен стать 3
     EXPECT_DOUBLE_EQ(r2, 3.0);
 }
-
-// ==================================================
-// ВСЕГО ТЕСТОВ: 5+4+4+4+3+4+2 = 26 тестов ✅
-// ==================================================

@@ -4,25 +4,21 @@
 
 class Circle {
  private:
-    double radius;   // радиус
-    double ference;  // длина окружности
-    double area;     // площадь
+    double radius;
+    double ference;
+    double area;
 
-    // Вспомогательные приватные методы для пересчёта
     void updateFromRadius();
     void updateFromFerence();
     void updateFromArea();
 
  public:
-    // Конструктор
     explicit Circle(double r);
 
-    // Сеттеры
     void setRadius(double r);
     void setFerence(double f);
     void setArea(double a);
 
-    // Геттеры
     double getRadius() const;
     double getFerence() const;
     double getArea() const;
