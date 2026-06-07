@@ -1,7 +1,7 @@
 // Copyright 2025 UNN-CS
-#include <gtest/gtest.h>
 #include "circle.h"
 #include "tasks.h"
+#include <gtest/gtest.h>
 #define _USE_MATH_DEFINES
 #include <cmath>
 
