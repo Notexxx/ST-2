@@ -2,7 +2,6 @@
 #include "circle.h"
 #include "tasks.h"
 #include <gtest/gtest.h>
-#define _USE_MATH_DEFINES
 #include <cmath>
 // ==================================================
 // ТЕСТЫ ДЛЯ КОНСТРУКТОРА И ГЕТТЕРОВ (5 тестов)
