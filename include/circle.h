@@ -4,24 +4,24 @@
 
 class Circle {
  private:
-    double radius;
-    double ference;
-    double area;
+  double radius;
+  double ference;
+  double area;
 
-    void updateFromRadius();
-    void updateFromFerence();
-    void updateFromArea();
+  void recalcFromRadius();
+  void recalcFromFerence();
+  void recalcFromArea();
 
  public:
-    explicit Circle(double r);
+  explicit Circle(double r);
 
-    void setRadius(double r);
-    void setFerence(double f);
-    void setArea(double a);
+  void setRadius(double r);
+  void setFerence(double f);
+  void setArea(double a);
 
-    double getRadius() const;
-    double getFerence() const;
-    double getArea() const;
+  double getRadius() const;
+  double getFerence() const;
+  double getArea() const;
 };
 
 #endif  // INCLUDE_CIRCLE_H_

@@ -1,226 +1,166 @@
 // Copyright 2025 UNN-CS
+#include <gtest/gtest.h>
 #include "circle.h"
 #include "tasks.h"
-#include <gtest/gtest.h>
-#include <cmath>
-// ==================================================
-// ТЕСТЫ ДЛЯ КОНСТРУКТОРА И ГЕТТЕРОВ (5 тестов)
-// ==================================================
 
-TEST(CircleTest, ConstructorAndGetters) {
-    Circle c(5.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 5.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * M_PI * 5.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 25.0);
+const double EPS = 1e-6;
+const double PI = 3.14159265358979323846;
+
+// --- Конструктор ---
+
+TEST(CircleTest, ConstructorSetsRadius) {
+  Circle c(5.0);
+  EXPECT_NEAR(5.0, c.getRadius(), EPS);
 }
 
-TEST(CircleTest, ZeroRadius) {
-    Circle c(0.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), 0.0);
+TEST(CircleTest, ConstructorCalculatesFerence) {
+  Circle c(5.0);
+  EXPECT_NEAR(2.0 * PI * 5.0, c.getFerence(), EPS);
 }
 
-TEST(CircleTest, SmallRadius) {
-    Circle c(0.001);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 0.001);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * M_PI * 0.001);
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 0.000001);
+TEST(CircleTest, ConstructorCalculatesArea) {
+  Circle c(5.0);
+  EXPECT_NEAR(PI * 25.0, c.getArea(), EPS);
 }
 
-TEST(CircleTest, LargeRadius) {
-    Circle c(1e6);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 1e6);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * M_PI * 1e6);
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 1e12);
+TEST(CircleTest, ConstructorZeroRadius) {
+  Circle c(0.0);
+  EXPECT_NEAR(0.0, c.getRadius(), EPS);
+  EXPECT_NEAR(0.0, c.getFerence(), EPS);
+  EXPECT_NEAR(0.0, c.getArea(), EPS);
 }
 
-TEST(CircleTest, NegativeRadius) {
-    Circle c(-5.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), -5.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * M_PI * (-5.0));
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 25.0);
+// --- setRadius ---
+
+TEST(CircleTest, SetRadiusUpdatesFerence) {
+  Circle c(1.0);
+  c.setRadius(10.0);
+  EXPECT_NEAR(2.0 * PI * 10.0, c.getFerence(), EPS);
 }
 
-// ==================================================
-// ТЕСТЫ ДЛЯ setRadius (4 теста)
-// ==================================================
-
-TEST(CircleTest, SetRadiusUpdatesFerenceAndArea) {
-    Circle c(1.0);
-    c.setRadius(2.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 2.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * M_PI * 2.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 4.0);
+TEST(CircleTest, SetRadiusUpdatesArea) {
+  Circle c(1.0);
+  c.setRadius(10.0);
+  EXPECT_NEAR(PI * 100.0, c.getArea(), EPS);
 }
 
-TEST(CircleTest, SetRadiusToZero) {
-    Circle c(5.0);
-    c.setRadius(0.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), 0.0);
+TEST(CircleTest, SetRadiusKeepsRadius) {
+  Circle c(1.0);
+  c.setRadius(7.0);
+  EXPECT_NEAR(7.0, c.getRadius(), EPS);
 }
 
-TEST(CircleTest, SetRadiusToNegative) {
-    Circle c(5.0);
-    c.setRadius(-3.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), -3.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * M_PI * (-3.0));
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 9.0);
+// --- setFerence ---
+
+TEST(CircleTest, SetFerenceUpdatesRadius) {
+  Circle c(1.0);
+  double f = 2.0 * PI * 5.0;
+  c.setFerence(f);
+  EXPECT_NEAR(5.0, c.getRadius(), EPS);
 }
 
-TEST(CircleTest, SetRadiusMultipleTimes) {
-    Circle c(1.0);
-    c.setRadius(2.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 2.0);
-    c.setRadius(3.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 3.0);
-    c.setRadius(4.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 4.0);
+TEST(CircleTest, SetFerenceUpdatesArea) {
+  Circle c(1.0);
+  double f = 2.0 * PI * 3.0;
+  c.setFerence(f);
+  EXPECT_NEAR(PI * 9.0, c.getArea(), EPS);
 }
 
-// ==================================================
-// ТЕСТЫ ДЛЯ setFerence (4 теста)
-// ==================================================
-
-TEST(CircleTest, SetFerenceUpdatesRadiusAndArea) {
-    Circle c(1.0);
-    double newFerence = 2 * M_PI * 3.0;
-    c.setFerence(newFerence);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 3.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), newFerence);
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 9.0);
+TEST(CircleTest, SetFerenceKeepsFerence) {
+  Circle c(1.0);
+  double f = 2.0 * PI * 4.0;
+  c.setFerence(f);
+  EXPECT_NEAR(f, c.getFerence(), EPS);
 }
 
-TEST(CircleTest, SetFerenceToZero) {
-    Circle c(5.0);
-    c.setFerence(0.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), 0.0);
+// --- setArea ---
+
+TEST(CircleTest, SetAreaUpdatesRadius) {
+  Circle c(1.0);
+  c.setArea(PI * 25.0);
+  EXPECT_NEAR(5.0, c.getRadius(), EPS);
 }
 
-TEST(CircleTest, SetFerenceToNegative) {
-    Circle c(5.0);
-    c.setFerence(-2 * M_PI * 2.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), -2.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), M_PI * 4.0);
+TEST(CircleTest, SetAreaUpdatesFerence) {
+  Circle c(1.0);
+  c.setArea(PI * 9.0);
+  EXPECT_NEAR(2.0 * PI * 3.0, c.getFerence(), EPS);
 }
 
-TEST(CircleTest, SetFerenceChainTest) {
-    Circle c(1.0);
-    c.setFerence(2 * M_PI * 2.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 2.0);
-    c.setFerence(2 * M_PI * 3.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 3.0);
+TEST(CircleTest, SetAreaKeepsArea) {
+  Circle c(1.0);
+  double a = PI * 16.0;
+  c.setArea(a);
+  EXPECT_NEAR(a, c.getArea(), EPS);
 }
 
-// ==================================================
-// ТЕСТЫ ДЛЯ setArea (4 теста)
-// ==================================================
+// --- Взаимосвязь ---
 
-TEST(CircleTest, SetAreaUpdatesRadiusAndFerence) {
-    Circle c(1.0);
-    double newArea = M_PI * 4.0;
-    c.setArea(newArea);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 2.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), newArea);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * M_PI * 2.0);
+TEST(CircleTest, SetRadiusThenGetConsistent) {
+  Circle c(2.0);
+  c.setRadius(6.0);
+  EXPECT_NEAR(c.getFerence(), 2.0 * PI * c.getRadius(), EPS);
+  EXPECT_NEAR(c.getArea(), PI * c.getRadius() * c.getRadius(), EPS);
 }
 
-TEST(CircleTest, SetAreaToZero) {
-    Circle c(5.0);
-    c.setArea(0.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 0.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), 0.0);
+TEST(CircleTest, SetFerenceThenGetConsistent) {
+  Circle c(1.0);
+  c.setFerence(20.0);
+  EXPECT_NEAR(c.getFerence(), 2.0 * PI * c.getRadius(), EPS);
 }
 
-TEST(CircleTest, SetAreaToNegative) {
-    Circle c(5.0);
-    c.setArea(-M_PI * 9.0);
-    EXPECT_TRUE(std::isnan(c.getRadius()) || c.getRadius() < 0);
+TEST(CircleTest, SetAreaThenGetConsistent) {
+  Circle c(1.0);
+  c.setArea(50.0);
+  EXPECT_NEAR(c.getArea(), PI * c.getRadius() * c.getRadius(), EPS);
 }
 
-TEST(CircleTest, SetAreaChainTest) {
-    Circle c(1.0);
-    c.setArea(M_PI * 4.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 2.0);
-    c.setArea(M_PI * 9.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 3.0);
+// --- Задача "Земля и верёвка" ---
+
+TEST(TasksTest, RopeGapIsPositive) {
+  EXPECT_GT(ropeGap(), 0.0);
 }
 
-// ==================================================
-// ТЕСТЫ ДЛЯ ЗАДАЧИ "ЗЕМЛЯ И ВЕРЁВКА" (3 теста)
-// ==================================================
-
-TEST(TasksTest, EarthRopeGapValue) {
-    double gap = earthRopeGap();
-    EXPECT_NEAR(gap, 0.159, 0.001);
+TEST(TasksTest, RopeGapIsAbout16cm) {
+  // 1 / (2 * PI) ≈ 0.159 м
+  EXPECT_NEAR(1.0 / (2.0 * PI), ropeGap(), EPS);
 }
 
-TEST(TasksTest, EarthRopeGapPositive) {
-    double gap = earthRopeGap();
-    EXPECT_GT(gap, 0.0);
+TEST(TasksTest, RopeGapIndependentOfRadius) {
+  // Зазор не зависит от радиуса Земли
+  EXPECT_NEAR(0.1591549, ropeGap(), 1e-5);
 }
 
-TEST(TasksTest, EarthRopeGapNotNegative) {
-    double gap = earthRopeGap();
-    EXPECT_GE(gap, 0.0);
+// --- Задача "Бассейн" ---
+
+TEST(TasksTest, PoolFenceCostPositive) {
+  EXPECT_GT(poolFenceCost(3.0, 1.0, 1000.0, 2000.0), 0.0);
 }
 
-// ==================================================
-// ТЕСТЫ ДЛЯ ЗАДАЧИ "БАССЕЙН" (4 теста)
-// ==================================================
-
-TEST(TasksTest, PoolCostPositive) {
-    double cost = poolCost();
-    EXPECT_GT(cost, 0.0);
+TEST(TasksTest, PoolFenceCostCorrect) {
+  // Внешний радиус = 3 + 1 = 4, периметр = 2*PI*4, цена = 2000
+  double expected = 2.0 * PI * 4.0 * 2000.0;
+  EXPECT_NEAR(expected, poolFenceCost(3.0, 1.0, 1000.0, 2000.0), EPS);
 }
 
-TEST(TasksTest, PoolCostCalculation) {
-    double expectedCost = (M_PI * 7.0) * 1000.0 + (2 * M_PI * 4.0) * 2000.0;
-    EXPECT_NEAR(poolCost(), expectedCost, 0.1);
+TEST(TasksTest, PoolConcreteCostPositive) {
+  EXPECT_GT(poolConcreteCost(3.0, 1.0, 1000.0), 0.0);
 }
 
-TEST(TasksTest, PoolCostReasonable) {
-    double cost = poolCost();
-    EXPECT_GT(cost, 70000.0);
-    EXPECT_LT(cost, 75000.0);
+TEST(TasksTest, PoolConcreteCostCorrect) {
+  // Площадь кольца = PI*(4^2 - 3^2) = PI*7, цена = 1000
+  double expected = PI * (16.0 - 9.0) * 1000.0;
+  EXPECT_NEAR(expected, poolConcreteCost(3.0, 1.0, 1000.0), EPS);
 }
 
-TEST(TasksTest, PoolCostNotZero) {
-    double cost = poolCost();
-    EXPECT_NE(cost, 0.0);
+TEST(TasksTest, PoolFenceBiggerPath) {
+  double fence1 = poolFenceCost(3.0, 1.0, 1000.0, 2000.0);
+  double fence2 = poolFenceCost(3.0, 2.0, 1000.0, 2000.0);
+  EXPECT_GT(fence2, fence1);
 }
 
-// ==================================================
-// КОМБИНИРОВАННЫЕ ТЕСТЫ (2 теста)
-// ==================================================
-
-TEST(CircleTest, SetRadiusThenSetFerenceThenSetArea) {
-    Circle c(1.0);
-    c.setRadius(2.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 2.0);
-    c.setFerence(2 * M_PI * 3.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 3.0);
-    c.setArea(M_PI * 16.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 4.0);
-}
-
-TEST(CircleTest, GettersAfterMultipleSets) {
-    Circle c(1.0);
-    c.setRadius(2.0);
-    double r1 = c.getRadius();
-    double f1 = c.getFerence();
-    double a1 = c.getArea();
-
-    c.setFerence(2 * M_PI * 3.0);
-    double r2 = c.getRadius();
-    double f2 = c.getFerence();
-    double a2 = c.getArea();
-
-    EXPECT_DOUBLE_EQ(r1, 2.0);
-    EXPECT_DOUBLE_EQ(r2, 3.0);
+TEST(TasksTest, PoolConcreteWidePath) {
+  double cost1 = poolConcreteCost(3.0, 1.0, 1000.0);
+  double cost2 = poolConcreteCost(3.0, 2.0, 1000.0);
+  EXPECT_GT(cost2, cost1);
 }

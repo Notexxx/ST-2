@@ -1,45 +1,43 @@
 // Copyright 2025 UNN-CS
 #include "circle.h"
-#include <cmath>  // для M_PI
+#include <cmath>
 
-// Вспомогательные методы
-void Circle::updateFromRadius() {
-    ference = 2 * M_PI * radius;
-    area = M_PI * radius * radius;
+static const double PI = 3.14159265358979323846;
+
+void Circle::recalcFromRadius() {
+  ference = 2.0 * PI * radius;
+  area = PI * radius * radius;
 }
 
-void Circle::updateFromFerence() {
-    radius = ference / (2 * M_PI);
-    area = M_PI * radius * radius;
+void Circle::recalcFromFerence() {
+  radius = ference / (2.0 * PI);
+  area = PI * radius * radius;
 }
 
-void Circle::updateFromArea() {
-    radius = std::sqrt(area / M_PI);
-    ference = 2 * M_PI * radius;
+void Circle::recalcFromArea() {
+  radius = sqrt(area / PI);
+  ference = 2.0 * PI * radius;
 }
 
-// Конструктор
 Circle::Circle(double r) : radius(r) {
-    updateFromRadius();
+  recalcFromRadius();
 }
 
-// Сеттеры
 void Circle::setRadius(double r) {
-    radius = r;
-    updateFromRadius();
+  radius = r;
+  recalcFromRadius();
 }
 
 void Circle::setFerence(double f) {
-    ference = f;
-    updateFromFerence();
+  ference = f;
+  recalcFromFerence();
 }
 
 void Circle::setArea(double a) {
-    area = a;
-    updateFromArea();
+  area = a;
+  recalcFromArea();
 }
 
-// Геттеры
 double Circle::getRadius() const { return radius; }
 double Circle::getFerence() const { return ference; }
 double Circle::getArea() const { return area; }
